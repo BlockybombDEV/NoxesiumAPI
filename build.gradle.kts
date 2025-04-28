@@ -27,11 +27,12 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-bukkit-core:10.0.0")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.11")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.11")
+    implementation("io.github.revxrsal:lamp.brigadier:4.0.0-rc.11")
     implementation("fr.skytasul:glowingentities:1.4.3")
     implementation("com.noxcrew.noxesium:api:2.7.4")
     implementation("com.noxcrew.noxesium:paper:2.7.4")
-    implementation("dev.jorel:commandapi-bukkit-kotlin:10.0.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
 }
@@ -58,7 +59,11 @@ tasks {
     withType<KotlinCompile> {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
+            javaParameters = true
         }
+    }
+    withType<JavaCompile> {
+        options.compilerArgs.add("-parameters")
     }
 }
 

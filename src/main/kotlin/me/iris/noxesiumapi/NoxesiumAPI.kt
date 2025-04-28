@@ -23,6 +23,7 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import revxrsal.commands.bukkit.BukkitLamp
 
 @Suppress("unused")
 class NoxesiumAPI : JavaPlugin() {
@@ -68,11 +69,12 @@ class NoxesiumAPI : JavaPlugin() {
         ServerRules(noxesiumManager)
         EntityRules(noxesiumManager)
 
-        if (Bukkit.getPluginManager().getPlugin("CommandAPI")?.isEnabled == true) {
-            Logger.info("CommandAPI found! Attempting to load commands.")
-            registerCommands()
-        } else {
-            Logger.warn("Could not find CommandAPI! Commands will not be loaded.")
+        val lamp = BukkitLamp.builder(this).build()
+
+        lamp.apply {
+            register(
+
+            )
         }
 
         NoxesiumPackets.SERVER_QIB_TRIGGERED.addListener(noxesiumManager) { packet, player ->
