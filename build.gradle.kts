@@ -29,8 +29,8 @@ dependencies {
     paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:10.0.0")
     implementation("fr.skytasul:glowingentities:1.4.3")
-    implementation("com.noxcrew.noxesium:api:2.7.4")
-    implementation("com.noxcrew.noxesium:paper:2.7.4")
+    implementation("com.noxcrew.noxesium:api:2.7.6")
+    implementation("com.noxcrew.noxesium:paper:2.7.6")
     implementation("dev.jorel:commandapi-bukkit-kotlin:10.0.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 

@@ -4,22 +4,23 @@ import com.noxcrew.noxesium.api.qib.QibDefinition
 import com.noxcrew.noxesium.paper.api.EntityRuleManager
 import com.noxcrew.noxesium.paper.api.NoxesiumManager
 import com.noxcrew.noxesium.paper.api.network.NoxesiumPackets
+import com.noxcrew.noxesium.paper.api.rule.ServerRules as NoxesiumServerRules
 import com.noxcrew.noxesium.paper.api.rule.EntityRules
-import com.noxcrew.noxesium.paper.api.rule.ServerRules
+import dev.jorel.commandapi.CommandAPI
+import dev.jorel.commandapi.CommandAPIBukkitConfig
 import dev.jorel.commandapi.CommandPermission
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
 import fr.skytasul.glowingentities.GlowingBlocks
 import fr.skytasul.glowingentities.GlowingEntities
-import me.iris.noxesiumapi.commands.CreativeItems
-import me.iris.noxesiumapi.commands.Rules
+import me.iris.noxesiumapi.commands.CreativeItemsCommand
+import me.iris.noxesiumapi.commands.ServerRulesCommand
 import me.iris.noxesiumapi.commands.Sound
 import me.iris.noxesiumapi.event.NoxesiumPlayerRiptideEvent
 import me.iris.noxesiumapi.event.NoxesiumQibTriggeredEvent
 import me.iris.noxesiumapi.packets.OpenLinkPacket
 import me.iris.noxesiumapi.serverrules.CreativeItemsManager
 import me.iris.noxesiumapi.packets.SoundManager
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,8 +50,13 @@ class NoxesiumAPI : JavaPlugin() {
 
     }
 
+    override fun onLoad() {
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this).setNamespace("noxesiumapi"))
+    }
+
     override fun onEnable() {
         instance = this
+        CommandAPI.onEnable()
 
         // Enable glowing APIs
         glowingEntities = GlowingEntities(this)
@@ -65,15 +71,15 @@ class NoxesiumAPI : JavaPlugin() {
         creativeItemsManager = CreativeItemsManager()
 
         // Registers all rules
-        ServerRules(noxesiumManager)
+        NoxesiumServerRules(noxesiumManager)
         EntityRules(noxesiumManager)
 
-        if (Bukkit.getPluginManager().getPlugin("CommandAPI")?.isEnabled == true) {
-            Logger.info("CommandAPI found! Attempting to load commands.")
-            registerCommands()
-        } else {
-            Logger.warn("Could not find CommandAPI! Commands will not be loaded.")
-        }
+//        if (Bukkit.getPluginManager().getPlugin("CommandAPI")?.isEnabled == true) {
+//            Logger.info("CommandAPI found! Attempting to load commands.")
+//            registerCommands()
+//        } else {
+//            Logger.warn("Could not find CommandAPI! Commands will not be loaded.")
+//        }
 
         NoxesiumPackets.SERVER_QIB_TRIGGERED.addListener(noxesiumManager) { packet, player ->
             NoxesiumQibTriggeredEvent(player, packet.behavior, packet.qibType, packet.entityId).callEvent()
@@ -117,11 +123,11 @@ class NoxesiumAPI : JavaPlugin() {
     }
 
     private fun registerCommands() {
-        Rules().registerCommands()
+        ServerRulesCommand().registerCommands()
         Sound().registerCommands()
-        CreativeItems().registerCommands()
+        CreativeItemsCommand().registerCommands()
         val rules = subcommand("serverrules") {
-            for (command in Rules.RuleCommands) {
+            for (command in ServerRulesCommand.RuleCommands) {
                 subcommand(command)
             }
         }
@@ -131,7 +137,7 @@ class NoxesiumAPI : JavaPlugin() {
             }
         }
         val creativeItems = subcommand("creativeItems") {
-            for (command in CreativeItems.creativeItemsCommands) {
+            for (command in CreativeItemsCommand.creativeItemsCommands) {
                 subcommand(command)
             }
         }

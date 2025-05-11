@@ -10,7 +10,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.inventory.ItemStack
 
-class CreativeItems {
+class CreativeItemsCommand {
 
     companion object {
         var creativeItemsCommands: MutableList<CommandAPICommand> = mutableListOf()
